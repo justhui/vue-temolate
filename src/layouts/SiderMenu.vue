@@ -63,7 +63,6 @@ export default {
           menuData.push(...this.getMenuData(item.children));
         }
       }
-      console.log(menuData);
       return menuData;
     }
   },

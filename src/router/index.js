@@ -1,5 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import findLast from "lodash/findLast";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import { check, isLogin } from "../utils/auth";
 Vue.use(VueRouter);
 
 const routes = [
@@ -214,6 +218,33 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+// 添加路由守卫
+
+router.beforeEach((to, from, next) => {
+  if (to.path !== from.path) {
+    NProgress.start();
+  }
+  const record = findLast(to.matched, record => record.meta.authority);
+  if (record && !check(record.meta.authority)) {
+    if (!isLogin() && to.path !== "/user/login") {
+      next({
+        path: "/user/login"
+      });
+    } else if (to.path !== "/403") {
+      next({
+        path: "/403"
+      });
+    }
+    NProgress.done();
+  }
+
+  next();
+});
+
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;

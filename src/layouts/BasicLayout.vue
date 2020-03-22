@@ -6,7 +6,7 @@
 
       <el-container>
         <!-- 侧边导航菜单  -->
-        <el-aside width="200px">
+        <el-aside width="auto">
           <sider-menu></sider-menu>
         </el-aside>
 
